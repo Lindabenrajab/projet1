@@ -112,7 +112,6 @@ if uploaded_file:
         row1[0].metric("💰 Revenu Total", f"{total_revenu:,.2f} TND")
         row1[1].metric("📈 Marge Totale", f"{total_marge:,.2f} TND")
         row1[2].metric("📊 Revenu Moyen / Contrat", f"{revenu_moyen:,.2f} TND")
-        row1[3].metric("💼 Marge Moyenne / Contrat", f"{marge_moyenne:,.2f} TND")
 
         row2 = st.columns(4)
         row2[0].metric("📁 Nombre de Contrats", nb_contrats)
@@ -138,13 +137,8 @@ if uploaded_file:
         ax2.axis('equal')
         st.pyplot(fig2)
 
-        st.markdown("### 🏪 Revenu par Distributeur")
         revenu_par_distrib = df_filtered.groupby("Distributeur")["Revenu"].sum().sort_values(ascending=False)
-        fig3, ax3 = plt.subplots(figsize=(10, 5))
-        sns.barplot(x=revenu_par_distrib.values, y=revenu_par_distrib.index, ax=ax3, palette="flare")
-        ax3.set_xlabel("Revenu (TND)")
-        st.pyplot(fig3)
-
+        
         st.markdown("### 🔥 Heatmap Revenus par Produit et Distributeur")
         pivot_table = df_filtered.pivot_table(index="Produit", columns="Distributeur", values="Revenu", aggfunc="sum", fill_value=0)
         fig4, ax4 = plt.subplots(figsize=(12, 6))
