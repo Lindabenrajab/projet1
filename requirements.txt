@@ -6,3 +6,4 @@ fpdf
 openpyxl
 xlsxwriter
 plotly
+python-pptx
