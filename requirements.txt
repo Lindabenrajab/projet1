@@ -7,3 +7,4 @@ openpyxl
 xlsxwriter
 plotly
 python-pptx
+scikit-learn
