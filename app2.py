@@ -249,13 +249,12 @@ if uploaded_file:
         st.markdown("### 📆 Évolution mensuelle du Revenu")
         df_filtered["Mois"] = df_filtered["Date"].dt.to_period("M").astype(str)
         revenu_par_mois = df_filtered.groupby("Mois")["Revenu"].sum()
-        fig6 = px.line(revenu_par_mois, x=revenu_par_mois.index, y=revenu_par_mois.values,
-                       labels={"x": "Mois", "y": "Revenu (TND)"}, title="Évolution Mensuelle du Revenu")
-        st.plotly_chart(fig6, use_container_width=True)
+        fig5, ax5 = plt.subplots()
+        revenu_par_mois.plot(kind="bar", ax=ax5, color="teal")
+        ax5.set_ylabel("Revenu (TND)")
+        st.pyplot(fig5)
 
         st.markdown("### 🏅 Top 5 Distributeurs par Revenu")
-        # CORRECTION : définition de la variable avant utilisation
-        revenu_par_distrib = df_filtered.groupby("Distributeur")["Revenu"].sum().sort_values(ascending=False)
         top5_distrib = revenu_par_distrib.head(5)
         st.dataframe(top5_distrib.reset_index().rename(columns={"Distributeur": "Distributeur", "Revenu": "Revenu Total (TND)"}))
 
