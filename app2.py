@@ -246,15 +246,24 @@ if uploaded_file:
         fig7 = px.box(df_filtered, x="Produit", y="Marge", color="Produit")
         st.plotly_chart(fig7, use_container_width=True)
 
+        # Ajout de fig6 qui n'était pas défini dans le code original, mais inclus dans la liste des exports
+        # Il est important de s'assurer que toutes les figures référencées existent.
+        # Par exemple, si vous avez une figure pour l'évolution mensuelle, nommez-la fig6.
+        # Ici, fig6 sera défini comme la figure de l'évolution mensuelle qui était précédemment nommée fig5_ax5.
+        
         st.markdown("### 📆 Évolution mensuelle du Revenu")
         df_filtered["Mois"] = df_filtered["Date"].dt.to_period("M").astype(str)
         revenu_par_mois = df_filtered.groupby("Mois")["Revenu"].sum()
-        fig5, ax5 = plt.subplots()
-        revenu_par_mois.plot(kind="bar", ax=ax5, color="teal")
-        ax5.set_ylabel("Revenu (TND)")
-        st.pyplot(fig5)
+        fig_evol_mensuelle = px.line(revenu_par_mois, x=revenu_par_mois.index, y=revenu_par_mois.values,
+                                     labels={"x": "Mois", "y": "Revenu (TND)"}, title="Évolution Mensuelle du Revenu")
+        st.plotly_chart(fig_evol_mensuelle, use_container_width=True) # Utilisation de Plotly pour l'interactivité
+        
+        # Définition de fig6 pour l'export, en utilisant la nouvelle figure Plotly
+        fig6 = fig_evol_mensuelle
 
         st.markdown("### 🏅 Top 5 Distributeurs par Revenu")
+        # Correction de l'erreur: définition de revenu_par_distrib
+        revenu_par_distrib = df_filtered.groupby("Distributeur")["Revenu"].sum().sort_values(ascending=False)
         top5_distrib = revenu_par_distrib.head(5)
         st.dataframe(top5_distrib.reset_index().rename(columns={"Distributeur": "Distributeur", "Revenu": "Revenu Total (TND)"}))
 
